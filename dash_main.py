@@ -2,7 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 
-from resources.server import app
+from resources.server import app, server
 from modules.tables_tab import TableTab
 from modules.scatter_tab import ScatterTab
 from modules.boxplot_tab import BoxPlotTab
@@ -69,8 +69,6 @@ app.layout = html.Div(children=[
 	html.Div(id='tabs-content-classes')],
 	style={'margin': '-8px'}
 )
-
-server = app.server
 
 if(__name__=='__main__'):
    app.run_server(debug=True)
