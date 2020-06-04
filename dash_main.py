@@ -2,7 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 
-from resources.server import app, server
+from resources.server import app
 from modules.tables_tab import TableTab
 from modules.scatter_tab import ScatterTab
 from modules.boxplot_tab import BoxPlotTab
@@ -10,6 +10,7 @@ from modules.histogram_tab import HistoTab
 from modules.linechart_tab import LineChartTab
 from modules.heatmap_tab import HeatMapTab
 
+server = app.server
 
 app.layout = html.Div(children=[
 	dcc.Tabs(

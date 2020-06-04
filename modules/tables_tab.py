@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-from resources.server import app, server
+from resources.server import app
 from resources.dataframes import DataTables
 
 available_tables = ['Players', 'Market Value', 'National Stats', 'Stats', 'Transfers', 'Trophies']
