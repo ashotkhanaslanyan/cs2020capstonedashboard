@@ -1,6 +1,4 @@
-apparmor
 appdirs==1.4.4
-application-utility
 astroid==2.4.0
 attrs==19.3.0
 bauh==0.9.4
