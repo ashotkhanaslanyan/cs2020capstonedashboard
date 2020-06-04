@@ -3,7 +3,6 @@ astroid==2.4.0
 attrs==19.3.0
 bauh==0.9.4
 Brotli==1.0.7
-btrfsutil==1.2.0
 CacheControl==0.12.6
 catfish==1.4.13
 ceph-volume==1.0.0
