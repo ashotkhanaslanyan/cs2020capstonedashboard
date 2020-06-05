@@ -2,7 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 
-from resources.server import app
+from common.server import app
 from modules.tables_tab import TableTab
 from modules.markval_tab import MarkValTab
 from modules.transfers_tab import TransfersTab
@@ -27,7 +27,7 @@ app.layout = html.Div(children=[
 		        ]
 		    ),
 		    dcc.Tab(
-		        label='Market Value',
+		        label='Market Values',
 		        value='mv_tab',
 		        children=[
 		        	MarkValTab.getTab()

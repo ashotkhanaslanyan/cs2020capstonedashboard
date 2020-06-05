@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-from resources.server import app
+from common.server import app
 
 class ModelsTab:
 

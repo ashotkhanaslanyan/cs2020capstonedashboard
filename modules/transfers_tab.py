@@ -5,8 +5,8 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import numpy as np 
 
-from resources.server import app
-from resources.dataframes import DataTables
+from common.server import app
+from common.dataframes import DataTables
 
 axis_values = ['one', 'two']
 
