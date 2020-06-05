@@ -35,39 +35,16 @@ top_leagues = ['LaLiga','Bundesliga','Serie A','Premier League',
           'MLS','Jupiler Pro League', 'Série A', 'Superliga']
 markval_tt = markval[markval.league.isin(top_leagues)]
 
-
-def getSummarized():
-	return html.Div(children=[
-		html.H6('Summarized by: ',
-			style={
-				'margin-left': '10px'
-			}
-		),
-		dcc.Dropdown(
-			id='smrzd_selector',
-			options=[{'label': i, 'value': i} for i in ['mean', 'median', 'range', 'min', 'max']],
-			value='mean',
-			style={
-				'width': '300px',
-				'margin-bottom': '2px',
-				'margin-left': '5px',
-				'float': 'left'
-			}
-		),
-	])
-
 plot_types = {'scatter plot': 'scatter', 'line chart': 'line'}
 
 plot_options = {
 	'scatter': {
 		'axis': {'Player\'s age': 'age', 'Previous year\'s market value': 'last_year_mv', 'Cumulative market value': 'cum_mv'},
-		'facet': {'none': 'none', 'year': 'year', 'position': 'main_field_position'},
-		'summarized': html.Div(dcc.RadioItems(id='smrzd_selector', value='none', style={'display': 'none'}))
+		'facet': {'none': 'none', 'year': 'year', 'position': 'main_field_position'}
 	},
 	'line': {
 		'axis': {'Player\'s age': 'age', 'Year': 'year'},
-		'facet': {'none': 'none', 'position': 'main_field_position', 'top leagues': 'league', 'continent': 'continent'},
-		'summarized': getSummarized()
+		'facet': {'none': 'none', 'position': 'main_field_position', 'top leagues': 'league', 'continent': 'continent'}
 	}
 }
 
@@ -88,9 +65,9 @@ class MarkValTab:
 				dcc.Dropdown(
 					id='plot_selector',
 					options=[{'label': i, 'value': plot_types[i]} for i in plot_types],
-					value='line',
+					value='scatter',
 					style={
-						'width': '300px',
+						'width': '95%',
 						'margin-bottom': '2px',
 						'margin-left': '5px',
 						'float': 'left'
@@ -107,7 +84,7 @@ class MarkValTab:
 
 
 					style={
-						'width': '300px',
+						'width': '95%',
 						'margin-bottom': '2px',
 						'margin-left': '5px',
 						'float': 'left'
@@ -122,14 +99,34 @@ class MarkValTab:
 				dcc.Dropdown(
 					id='facet_value',
 					style={
-						'width': '300px',
+						'width': '95%',
 						'margin-bottom': '2px',
 						'margin-left': '5px',
 						'float': 'left'
 					}
 				),
-				html.Div(id='summarized_div')
-				],
+				html.Div(children=[
+					html.H6('Summarized by: ',
+						style={
+							'margin-left': '10px'
+						}
+					),
+					dcc.Dropdown(
+						id='smrzd_selector',
+						options=[{'label': i, 'value': i} for i in ['mean', 'median', 'range', 'min', 'max']],
+						value='mean',
+						style={
+							'width': '95%',
+							'margin-bottom': '2px',
+							'margin-left': '5px',
+							'float': 'left'
+						}
+					)],
+					id='smrzd_display',
+					style={
+						'display':'none'
+					}
+				)],
 	            style={
 	            	'margin-left': '5px',
 	            	'width': '23%',
@@ -153,12 +150,16 @@ class MarkValTab:
 @app.callback(
 	[Output('x_axis_value', 'options'),
 	Output('facet_value', 'options'),
-	Output('summarized_div', 'children')],
+	Output('smrzd_display', 'style')],
 	[Input('plot_selector', 'value')])
 def plotOptioins(plot):
+	if(plot=='scatter'):
+		smrzd_style = {'display': 'none'}
+	else:
+		smrzd_style = {'display': 'block'}
 	return [{'label': i, 'value': plot_options[plot]['axis'][i]} for i in plot_options[plot]['axis']],\
 		[{'label': i, 'value': plot_options[plot]['facet'][i]} for i in plot_options[plot]['facet']],\
-		plot_options[plot]['summarized']
+		smrzd_style
 
 @app.callback(
 	[Output('x_axis_value', 'value'),
