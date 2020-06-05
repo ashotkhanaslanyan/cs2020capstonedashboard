@@ -174,8 +174,7 @@ def setDropdownValues(axis_options, facet_options):
 	[Input('plot_selector', 'value'),
 	Input('x_axis_value', 'value'),
 	Input('facet_value', 'value'),
-	Input('smrzd_selector', 'value')
-	])
+	Input('smrzd_selector', 'value')])
 def plotGraph(plot, axis_val, facet_val, smrzd_val):
 	if(plot=='scatter'):
 		return scatter_mv_change(markval, axis_val, markval.mv, facet_val)
