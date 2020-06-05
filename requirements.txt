@@ -30,8 +30,6 @@ PyGObject==3.36.1
 PyQt5==5.14.2
 PyQt5-sip==12.7.2
 python-dateutil==2.8.1
-python-distutils-extra==2.39
-pytoml==0.1.21
 PyYAML==5.3.1
 scipy==1.4.1
 seaborn==0.10.0
