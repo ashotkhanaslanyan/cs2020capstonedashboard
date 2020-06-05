@@ -10,7 +10,7 @@ from resources.dataframes import DataTables
 
 axis_values = ['one', 'two']
 
-class ScatterTab:
+class TransfersTab:
 
 	def __init__(self):
 		pass
@@ -18,13 +18,13 @@ class ScatterTab:
 	def getTab():
 		return html.Div(children=[
 			html.Div(children=[
-				html.H6('X axis',
+				html.H6('Position',
 					style={
 						'margin-left': '10px',
 						'float': 'left'
 					}),
 				dcc.Dropdown(
-					id='x_axis_picker',
+					id='position_picker',
 					options=[{'label': i, 'value': i} for i in axis_values],
 					value='one',
 					style={
@@ -41,13 +41,13 @@ class ScatterTab:
 				}
 			),
 			html.Div(children=[
-				html.H6('Y axis',
+				html.H6('Attribute',
 					style={
 						'margin-left': '10px',
 						'float': 'left'
 					}),
 				dcc.Dropdown(
-					id='y_axis_picker',
+					id='attribute_picker',
 					options=[{'label': i, 'value': i} for i in axis_values],
 					value='two',
 					style={
@@ -65,7 +65,7 @@ class ScatterTab:
 			),
 			html.Div(children=[
 				dcc.Graph(
-					id='scat_plt'
+					id='box_plt'
 				)],
 				style={
 					'padding': '0px',
@@ -77,7 +77,7 @@ class ScatterTab:
 			),
 			html.Div(children=[
 				dcc.Slider(
-			        id='sp_season_slider',
+			        id='bp_season_slider',
 			        min=2006,
 			        max=2019,
 			        value=2019,
@@ -96,11 +96,11 @@ class ScatterTab:
 # uncomment this
 
 # @app.callback(
-# 	Output('scat_plt', 'figure'),
-# 	[Input('x_axis_picker', 'value'),
-# 	Input('y_axis_picker', 'value'),
-# 	Input('sp_season_slider', 'value')])
+# 	Output('box_plt', 'figure'),
+# 	[Input('position_picker', 'value'),
+# 	Input('attribute_picker', 'value'),
+# 	Input('bp_season_slider', 'value')])
 
 # add plot function
 
-# def update_scat_plot(x, y, sson):
+# def update_scat_plot(pos, att, sson):

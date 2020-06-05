@@ -5,14 +5,14 @@ from dash.dependencies import Input, Output
 
 from resources.server import app
 
-class HeatMapTab:
+class ModelsTab:
 
 	def __init__(self):
 		pass
 
 	def getTab():
 		return html.Div(children=[
-			html.H2('HeatMapTab',
+			html.H2('LineChartTab',
 				style={
 					'margin': '5px'
 				})

@@ -17,36 +17,50 @@ class TableTab:
 	def getTab():
 		global available_tables
 		return html.Div(children=[
-			dcc.Dropdown(
-				id='table_picker',
-				options=[{'label': i, 'value': i} for i in available_tables],
-				value='Players',
+			html.Div(children=[
+				dcc.Dropdown(
+					id='table_picker',
+					options=[{'label': i, 'value': i} for i in available_tables],
+					value='Players',
+					style={
+						'width': '300px',
+						'position': 'center',
+						'float': 'bottom',
+						'margin-top': '5px',
+						'margin-bottom': '5px',
+						'margin-left': '2px'
+					}
+				)],
 				style={
-					'width': '300px',
-					'position': 'center',
-					'margin-top': '5px',
-					'margin-bottom': '5px',
-					'margin-left': '2px'
+					'flex': '0 1 auto'
 				}
 			),
-
 			html.Div(
 				children=[
 					dash_table.DataTable(
-						id='table'
+						id='table',
+				        filter_action="native",
+				        sort_action="native",
+				        sort_mode="multi",
 					)
 				],
 				style={
 					'width': 'auto', 
-					'height': '500px',  
+					'flex': '1 1 auto',
 					'margin': '5px',
 					'overflow-y': 'auto',
 					'border-bottom': '1px solid #b8b8b8', 
 					'border-left': '1px solid #b8b8b8',
 					'border-top': '1px solid #b8b8b8'
-					}, 
-				)
-			])
+				}, 
+			)],
+			style={
+				'flex-grow': '1',
+				'display': 'flex',
+				'flex-flow': 'column',
+				'height': '89vh'
+			}
+		)
 
 @app.callback(
 	[Output('table', 'columns'),

@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 
 from resources.server import app
 
-class HistoTab:
+class PlayersTab:
 
 	def __init__(self):
 		pass

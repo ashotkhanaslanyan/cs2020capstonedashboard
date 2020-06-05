@@ -4,71 +4,70 @@ import dash_html_components as html
 
 from resources.server import app
 from modules.tables_tab import TableTab
-from modules.scatter_tab import ScatterTab
-from modules.boxplot_tab import BoxPlotTab
-from modules.histogram_tab import HistoTab
-from modules.linechart_tab import LineChartTab
-from modules.heatmap_tab import HeatMapTab
+from modules.markval_tab import MarkValTab
+from modules.transfers_tab import TransfersTab
+from modules.players_tab import PlayersTab
+from modules.models_tab import ModelsTab
 
 server = app.server
 
 app.layout = html.Div(children=[
 	dcc.Tabs(
 		id="tabs-with-classes",
-		value='scat_tab',
+		value='mv_tab',
 		parent_className='custom-tabs',
 		className='custom-tabs-container',
 		children=[
 			dcc.Tab(
-		        label='Tables',
+		        label='Data Tables',
 		        value='tbl_tab',
 		        children=[
 		        	TableTab.getTab()
 		        ]
 		    ),
 		    dcc.Tab(
-		        label='Scatterplots',
-		        value='scat_tab',
+		        label='Market Value',
+		        value='mv_tab',
 		        children=[
-		        	ScatterTab.getTab()
+		        	MarkValTab.getTab()
 		        ]
 		    ),
 		    dcc.Tab(
-		        label='Boxplots',
-		        value='bplot_tab',
+		        label='Transfers',
+		        value='tf_tab',
 		        children=[
-		        	BoxPlotTab.getTab()
+		        	TransfersTab.getTab()
 		        ]
 		    ),
 		    dcc.Tab(
-		        label='Histograms',
-		        value='hist_tab', 
+		        label='Players',
+		        value='pl_tab', 
 		        children=[
-		        	HistoTab.getTab()
+		        	PlayersTab.getTab()
 		        ]
 		    ),
 		    dcc.Tab(
-		        label='Line Charts',
-		        value='line_tab',
+		        label='ML Models',
+		        value='ml_tab',
 		        children=[
-		        	LineChartTab.getTab()
-		        ]
-		    ),
-		    dcc.Tab(
-		        label='Heatmaps',
-		        value='hmap_tab',
-		        children=[
-		        	HeatMapTab.getTab()
+		        	ModelsTab.getTab()
 		        ]
 		    )
 		],
 		style={
-			'margin': '0px'
+			'margin': '0px',
+			'flex': '0 1 auto'
 			}
 		),
 
-	html.Div(id='tabs-content-classes')],
-	style={'margin': '-8px'}
+		html.Div(id='tabs-content-classes')
+	],
+	style={
+		'margin': '-8px',
+		  'display': 'flex',
+		  'flex-flow': 'column',
+		  'height': '98vh'
+    }
 )
 
 if(__name__=='__main__'):

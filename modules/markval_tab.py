@@ -10,7 +10,7 @@ from resources.dataframes import DataTables
 
 axis_values = ['one', 'two']
 
-class BoxPlotTab:
+class MarkValTab:
 
 	def __init__(self):
 		pass
@@ -18,13 +18,13 @@ class BoxPlotTab:
 	def getTab():
 		return html.Div(children=[
 			html.Div(children=[
-				html.H6('Position',
+				html.H6('X axis',
 					style={
 						'margin-left': '10px',
 						'float': 'left'
 					}),
 				dcc.Dropdown(
-					id='position_picker',
+					id='x_axis_picker',
 					options=[{'label': i, 'value': i} for i in axis_values],
 					value='one',
 					style={
@@ -41,13 +41,13 @@ class BoxPlotTab:
 				}
 			),
 			html.Div(children=[
-				html.H6('Attribute',
+				html.H6('Y axis',
 					style={
 						'margin-left': '10px',
 						'float': 'left'
 					}),
 				dcc.Dropdown(
-					id='attribute_picker',
+					id='y_axis_picker',
 					options=[{'label': i, 'value': i} for i in axis_values],
 					value='two',
 					style={
@@ -65,7 +65,7 @@ class BoxPlotTab:
 			),
 			html.Div(children=[
 				dcc.Graph(
-					id='box_plt'
+					id='scat_plt'
 				)],
 				style={
 					'padding': '0px',
@@ -77,7 +77,7 @@ class BoxPlotTab:
 			),
 			html.Div(children=[
 				dcc.Slider(
-			        id='bp_season_slider',
+			        id='sp_season_slider',
 			        min=2006,
 			        max=2019,
 			        value=2019,
@@ -96,11 +96,11 @@ class BoxPlotTab:
 # uncomment this
 
 # @app.callback(
-# 	Output('box_plt', 'figure'),
-# 	[Input('position_picker', 'value'),
-# 	Input('attribute_picker', 'value'),
-# 	Input('bp_season_slider', 'value')])
+# 	Output('scat_plt', 'figure'),
+# 	[Input('x_axis_picker', 'value'),
+# 	Input('y_axis_picker', 'value'),
+# 	Input('sp_season_slider', 'value')])
 
 # add plot function
 
-# def update_scat_plot(pos, att, sson):
+# def update_scat_plot(x, y, sson):
