@@ -11,6 +11,9 @@ from modules.models_tab import ModelsTab
 
 server = app.server
 
+app.title = 'Sport Stat'
+app.add_url_rule('/assets/favicon.ico',
+                redirect_to=url_for('static', filename='favicon.ico'))
 app.layout = html.Div(children=[
 	dcc.Tabs(
 		id="tabs-with-classes",
