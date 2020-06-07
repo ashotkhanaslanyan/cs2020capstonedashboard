@@ -63,7 +63,7 @@ class MarkValTab:
 					}
 				),
 				dcc.Dropdown(
-					id='plot_selector',
+					id='mvt_plot_selector',
 					options=[{'label': i, 'value': plot_types[i]} for i in plot_types],
 					value='scatter',
 					style={
@@ -80,7 +80,7 @@ class MarkValTab:
 					}
 				),
 				dcc.Dropdown(
-					id='x_axis_value',
+					id='mvt_x_axis_value',
 
 
 					style={
@@ -97,7 +97,7 @@ class MarkValTab:
 					}
 				),
 				dcc.Dropdown(
-					id='facet_value',
+					id='mvt_facet_value',
 					style={
 						'width': '95%',
 						'margin-bottom': '2px',
@@ -112,7 +112,7 @@ class MarkValTab:
 						}
 					),
 					dcc.Dropdown(
-						id='smrzd_selector',
+						id='mvt_smrzd_selector',
 						options=[{'label': i, 'value': i} for i in ['mean', 'median', 'range', 'min', 'max']],
 						value='mean',
 						style={
@@ -122,7 +122,7 @@ class MarkValTab:
 							'float': 'left'
 						}
 					)],
-					id='smrzd_display',
+					id='mvt_smrzd_display',
 					style={
 						'display':'none'
 					}
@@ -139,7 +139,7 @@ class MarkValTab:
 	            }
 	        ),
 	        dcc.Graph(
-	        	id='markval_plot', 
+	        	id='mvt_markval_plot', 
 	        	style={
 	        		'width': '75%', 
 	        		'display': 'inline-block',
@@ -148,10 +148,10 @@ class MarkValTab:
         ])
 
 @app.callback(
-	[Output('x_axis_value', 'options'),
-	Output('facet_value', 'options'),
-	Output('smrzd_display', 'style')],
-	[Input('plot_selector', 'value')])
+	[Output('mvt_x_axis_value', 'options'),
+	Output('mvt_facet_value', 'options'),
+	Output('mvt_smrzd_display', 'style')],
+	[Input('mvt_plot_selector', 'value')])
 def plotOptioins(plot):
 	if(plot=='scatter'):
 		smrzd_style = {'display': 'none'}
@@ -162,19 +162,19 @@ def plotOptioins(plot):
 		smrzd_style
 
 @app.callback(
-	[Output('x_axis_value', 'value'),
-	Output('facet_value', 'value')],
-	[Input('x_axis_value', 'options'),
-	Input('facet_value', 'options')])
+	[Output('mvt_x_axis_value', 'value'),
+	Output('mvt_facet_value', 'value')],
+	[Input('mvt_x_axis_value', 'options'),
+	Input('mvt_facet_value', 'options')])
 def setDropdownValues(axis_options, facet_options):
 	return axis_options[0]['value'], facet_options[0]['value']
 
 @app.callback(
-	Output('markval_plot', 'figure'),
-	[Input('plot_selector', 'value'),
-	Input('x_axis_value', 'value'),
-	Input('facet_value', 'value'),
-	Input('smrzd_selector', 'value')])
+	Output('mvt_markval_plot', 'figure'),
+	[Input('mvt_plot_selector', 'value'),
+	Input('mvt_x_axis_value', 'value'),
+	Input('mvt_facet_value', 'value'),
+	Input('mvt_smrzd_selector', 'value')])
 def plotGraph(plot, axis_val, facet_val, smrzd_val):
 	if(plot=='scatter'):
 		return scatter_mv_change(markval, axis_val, markval.mv, facet_val)

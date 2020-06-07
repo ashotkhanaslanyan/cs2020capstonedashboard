@@ -13,32 +13,32 @@ import plotly.graph_objects as go
 from scipy.stats import shapiro
 from datetime import date, timedelta
 
-def scatter(df, xvar, yvar, labels, title, facet_var = "main_field_position",
+def scatter(df, xvar, yvar, facet_var = "main_field_position",
             facet = False, facet_row = False, facet_row_var = "continent"):
   transfers_plot = df[(df[xvar].notnull()) & (df[yvar].notnull())]
   if(facet):
     fig = px.scatter(transfers_plot, xvar, yvar,hover_data = ["name","age","nationality","from",
                                                               "to","year", "fee","mv"],
                     labels = {xvar:"", yvar:""},
-                    title = title, color = facet_var ,trendline = "ols",
+                    color = facet_var ,trendline = "ols",
                     facet_col = facet_var, facet_col_wrap = 2)
   elif(facet_row):
     fig = px.scatter(transfers_plot, xvar, yvar,hover_data = ["name","age","nationality","from",
                                                               "to","year", "fee","mv"],
                 labels = {xvar:"", yvar:""},
-                title = title, color = facet_var,trendline = "ols",
+                color = facet_var,trendline = "ols",
                 facet_col = facet_var, facet_col_wrap = 2, facet_row = facet_row_var)
   else: 
     fig = px.scatter(transfers_plot, xvar, yvar,hover_data = ["name","age","nationality","from",
                                                               "to","year", "fee","mv"], 
-                  labels = labels, trendline = "ols",
-                  title = title, color = "main_field_position" )
+                  trendline = "ols",
+                  color = "main_field_position" )
     
   fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
-  fig.for_each_trace(lambda t: t.update(name=t.name.split("=")[1]))
+  # fig.for_each_trace(lambda t: t.update(name=t.name.split("=")[1]))
   corr, _ = pearsonr(transfers_plot[xvar],transfers_plot[yvar])
-  print("Correlation between the variables",corr)
-  fig.show()
+  # print("Correlation between the variables",corr)
+  # fig.show()
   return fig
 
 def cor_over_time(df, xvar, yvar, label, title):
@@ -54,10 +54,9 @@ def cor_over_time(df, xvar, yvar, label, title):
                 labels = {"corr_x_y": label},
                 title = title)
   fig.update_xaxes(nticks=17)
-  fig.show()
   return fig
 
-def transfers_by_time(df, time_var, xaxis, title, group_var, summarizer = "mean",
+def transfers_by_time(df, time_var, group_var='main_field_position', summarizer = "mean",
                       legend = True, facet = False):
   if(summarizer == "mean"):
     plot_df = ( df >> 
@@ -86,24 +85,24 @@ def transfers_by_time(df, time_var, xaxis, title, group_var, summarizer = "mean"
             )    
   if(facet):
     fig = px.line(plot_df, x = time_var, y = "fee_summary", 
-                  color = group_var, title = title,
+                  color = group_var,
                   facet_col = group_var, facet_col_wrap=4,
-                  labels = { time_var : xaxis, "fee_summary" : ""},
+                  labels = { time_var : "", "fee_summary" : ""},
                   )
     fig.update_layout(
         showlegend = legend
     )
   else:
     fig = px.line(plot_df, x = time_var, y = "fee_summary", 
-                  color = group_var, title = title,
-                  labels = { time_var : xaxis, "fee_summary" : "Summarized transfer fee"}
+                  color = group_var, 
+                  labels = { time_var : "", "fee_summary" : "Summarized transfer fee"}
                   )
     fig.update_layout(
         showlegend = legend
     )
   fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
-  fig.for_each_trace(lambda t: t.update(name=t.name.split("=")[1]))
-  fig.show()
+  # fig.for_each_trace(lambda t: t.update(name=t.name.split("=")[1]))
+  # fig.show()
   return fig  
 
 def heat_map(df,title, diagonal = "both", w = 30,h = 20):
@@ -120,7 +119,7 @@ def heat_map(df,title, diagonal = "both", w = 30,h = 20):
     ax = sns.heatmap(corr, annot = True, linewidths=.5)
   ax.tick_params(right=True, top=True, labelright=True, labeltop=True)
   plt.title(title, fontsize = 20)
-  plt.show()
+  # plt.show()
   return plt
 
 def get_columns(df,cumulative):

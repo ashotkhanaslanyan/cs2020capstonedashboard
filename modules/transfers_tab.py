@@ -3,12 +3,39 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import pandas as pd
-import numpy as np 
+import numpy as np
+import math
+from dfply import *
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+import statistics 
+import plotly.graph_objects as go
+from scipy import stats
+from scipy.stats import pearsonr
+import plotly.graph_objects as go
+import warnings
+from scipy.stats import shapiro
+from datetime import date, timedelta
 
 from common.server import app
 from common.dataframes import DataTables
+from common.helpers.tfee_eda_helpers import *
 
-axis_values = ['one', 'two']
+transfers_eda = DataTables.transfers_eda
+
+plot_types = {'scatter plot': 'scatter', 'line chart': 'line'}
+
+plot_options = {
+	'scatter': {
+		'axis': {'Player\'s age': 'age', 'Market value': 'mv', 'Year of transfer': 'year'},
+		'facet': {'none': 'none', 'continent': 'continent', 'position': 'main_field_position', 'both': 'both'}
+	},
+	'line': {
+		'axis': {'Player\'s age': 'age', 'Year of transfer': 'year'},
+		'facet': {'none': 'none', 'position': 'main_field_position', 'transfer type': 'type'}
+	}
+}
 
 class TransfersTab:
 
@@ -16,91 +43,136 @@ class TransfersTab:
 		pass
 
 	def getTab():
-		return html.Div(children=[
+		return html.Div(children = [
 			html.Div(children=[
-				html.H6('Position',
+				html.H6('Plot type: ',
 					style={
-						'margin-left': '10px',
-						'float': 'left'
-					}),
+						'margin-left': '10px'
+					}
+				),
 				dcc.Dropdown(
-					id='position_picker',
-					options=[{'label': i, 'value': i} for i in axis_values],
-					value='one',
+					id='tt_plot_selector',
+					options=[{'label': i, 'value': plot_types[i]} for i in plot_types],
+					value='scatter',
 					style={
-						'width': '300px',
-						'margin-top': '5px',
+						'width': '95%',
 						'margin-bottom': '2px',
 						'margin-left': '5px',
 						'float': 'left'
 					}
-				)],
-				style={
-					'width': '48%',
-					'float': 'left'
-				}
-			),
-			html.Div(children=[
-				html.H6('Attribute',
+				),
+				html.H6('X axis: ',
 					style={
-						'margin-left': '10px',
-						'float': 'left'
-					}),
+						'margin-top': '3px',
+						'margin-left': '10px'
+					}
+				),
 				dcc.Dropdown(
-					id='attribute_picker',
-					options=[{'label': i, 'value': i} for i in axis_values],
-					value='two',
+					id='tt_x_axis_value',
+
+
 					style={
-						'width': '300px',
-						'margin-top': '5px',
+						'width': '95%',
 						'margin-bottom': '2px',
 						'margin-left': '5px',
 						'float': 'left'
 					}
+				),
+				html.H6('Facet: ',
+					style={
+						'margin-top': '3px',
+						'margin-left': '10px'
+					}
+				),
+				dcc.Dropdown(
+					id='tt_facet_value',
+					style={
+						'width': '95%',
+						'margin-bottom': '2px',
+						'margin-left': '5px',
+						'float': 'left'
+					}
+				),
+				html.Div(children=[
+					html.H6('Summarized by: ',
+						style={
+							'margin-left': '10px'
+						}
+					),
+					dcc.Dropdown(
+						id='tt_smrzd_selector',
+						options=[{'label': i, 'value': i} for i in ['mean', 'median', 'range', 'min', 'max']],
+						value='mean',
+						style={
+							'width': '95%',
+							'margin-bottom': '2px',
+							'margin-left': '5px',
+							'float': 'left'
+						}
+					)],
+					id='tt_smrzd_display',
+					style={
+						'display':'none'
+					}
 				)],
-				style={
-					'width': '48%',
-					'float': 'right'
-				}
-			),
-			html.Div(children=[
-				dcc.Graph(
-					id='box_plt'
-				)],
-				style={
-					'padding': '0px',
-					'display': 'inline-block',
-					'white-space': 'nowrap',
-					'height': '400px',
-					'width': '98%'
-				}
-			),
-			html.Div(children=[
-				dcc.Slider(
-			        id='bp_season_slider',
-			        min=2006,
-			        max=2019,
-			        value=2019,
-			        marks={str(year): str(year) for year in range(2006, 2020)},
-			        step=1
-			    )],
-				style={
-					'margin-top': '5px',
-					'width': '99%',
-					'display': 'inline-block',
-					'white-space': 'nowrap'
-				}
-			)]
-		)
+	            style={
+	            	'margin-left': '5px',
+	            	'width': '23%',
+	            	'padding': '5px 5px 10px 5px',
+	            	'background-color': '#c3d9de',
+	            	'height': '100%',
+	            	'border-radius': '20px',
+	            	'float': 'left',
+	            	'margin-top': '10px'
+	            }
+	        ),
+	        dcc.Graph(
+	        	id='tt_markval_plot', 
+	        	style={
+	        		'width': '75%', 
+	        		'display': 'inline-block',
+	        	}
+	        )
+        ])
 
-# uncomment this
+@app.callback(
+	[Output('tt_x_axis_value', 'options'),
+	Output('tt_facet_value', 'options'),
+	Output('tt_smrzd_display', 'style')],
+	[Input('tt_plot_selector', 'value')])
+def plotOptioins(plot):
+	if(plot=='scatter'):
+		smrzd_style = {'display': 'none'}
+	else:
+		smrzd_style = {'display': 'block'}
+	return [{'label': i, 'value': plot_options[plot]['axis'][i]} for i in plot_options[plot]['axis']],\
+		[{'label': i, 'value': plot_options[plot]['facet'][i]} for i in plot_options[plot]['facet']],\
+		smrzd_style
 
-# @app.callback(
-# 	Output('box_plt', 'figure'),
-# 	[Input('position_picker', 'value'),
-# 	Input('attribute_picker', 'value'),
-# 	Input('bp_season_slider', 'value')])
+@app.callback(
+	[Output('tt_x_axis_value', 'value'),
+	Output('tt_facet_value', 'value')],
+	[Input('tt_x_axis_value', 'options'),
+	Input('tt_facet_value', 'options')])
+def setDropdownValues(axis_options, facet_options):
+	return axis_options[0]['value'], facet_options[0]['value']
 
-# add plot function
-
-# def update_scat_plot(pos, att, sson):
+@app.callback(
+	Output('tt_markval_plot', 'figure'),
+	[Input('tt_plot_selector', 'value'),
+	Input('tt_x_axis_value', 'value'),
+	Input('tt_facet_value', 'value'),
+	Input('tt_smrzd_selector', 'value')])
+def plotGraph(plot, axis_val, facet_val, smrzd_val):
+	if(plot=='scatter'):
+		if(facet_val=='none'):
+			return scatter(transfers_eda, axis_val, 'fee')
+		elif(facet_val=='both'):
+			return scatter(transfers_eda, axis_val, 'fee', facet_row=True)	
+		else:
+			return scatter(transfers_eda, axis_val, 'fee', facet=True, facet_var=facet_val)	
+	else:
+		if(facet_val=='none'):
+			return transfers_by_time(transfers_eda, axis_val, summarizer=smrzd_val)
+		else:
+			return transfers_by_time(transfers_eda, axis_val, summarizer=smrzd_val, group_var=facet_val, facet=True)

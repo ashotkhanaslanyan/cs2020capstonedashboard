@@ -6,8 +6,6 @@ from common.server import app
 from modules.tables_tab import TableTab
 from modules.markval_tab import MarkValTab
 from modules.transfers_tab import TransfersTab
-from modules.players_tab import PlayersTab
-from modules.models_tab import ModelsTab
 
 server = app.server
 
@@ -34,24 +32,10 @@ app.layout = html.Div(children=[
 		        ]
 		    ),
 		    dcc.Tab(
-		        label='Transfers',
+		        label='Transfers Fee',
 		        value='tf_tab',
 		        children=[
 		        	TransfersTab.getTab()
-		        ]
-		    ),
-		    dcc.Tab(
-		        label='Players',
-		        value='pl_tab', 
-		        children=[
-		        	PlayersTab.getTab()
-		        ]
-		    ),
-		    dcc.Tab(
-		        label='ML Models',
-		        value='ml_tab',
-		        children=[
-		        	ModelsTab.getTab()
 		        ]
 		    )
 		],

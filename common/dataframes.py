@@ -12,3 +12,4 @@ class DataTables:
 	transfers = pd.read_pickle('data/transfers_Clean.pkl')
 	trophies = pd.read_pickle('data/trophies_Clean.pkl')
 	markval_prev_eda = pd.read_pickle('data/eda/markval_prev_eda.pkl')
+	transfers_eda = pd.read_pickle('data/eda/transfers_eda_data.pkl')
