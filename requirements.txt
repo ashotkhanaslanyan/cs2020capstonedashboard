@@ -26,7 +26,7 @@ plotly-express==0.4.1
 pluggy==0.13.1
 py==1.8.1
 pyaml==20.4.0
-Pygments==2.6.1
+Pygments==2.7.4
 PyQt5==5.14.2
 PyQt5-sip==12.7.2
 python-dateutil==2.8.1
