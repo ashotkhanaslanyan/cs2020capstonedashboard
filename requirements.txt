@@ -16,7 +16,7 @@ Jinja2==2.11.2
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 matplotlib==3.2.1
-numpy==1.18.2
+numpy==1.22.0
 packaging==20.4
 pandas==1.0.3
 pickleshare==0.7.5
